@@ -10,7 +10,7 @@ defmodule Bullion.MixProject do
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
-      deps: deps()
+      deps: deps(),
     ]
   end
 
@@ -43,7 +43,7 @@ defmodule Bullion.MixProject do
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
-      {:hashids, "~> 2.0"}
+      {:hashids, "~> 2.0"},
     ]
   end
 

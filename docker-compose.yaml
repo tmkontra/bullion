@@ -19,5 +19,5 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=bullion
-    expose:
-      - "5432"
+    ports:
+      - "54321:5432"

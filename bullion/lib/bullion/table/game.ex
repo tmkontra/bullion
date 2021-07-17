@@ -1,4 +1,4 @@
-defmodule Table.Game do
+defmodule Bullion.Table.Game do
   defstruct ~w[name buyin_dollars buyin_chips players buys cashouts]a
 
   def new(fields) do

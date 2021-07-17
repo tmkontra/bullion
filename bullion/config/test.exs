@@ -4,8 +4,9 @@ use Mix.Config
 config :bullion, Bullion.Repo,
   username: "postgres",
   password: "postgres",
-  database: "bullion_test",
+  database: "bullion",
   hostname: "localhost",
+  port: 54321,
   pool: Ecto.Adapters.SQL.Sandbox
 
 # We don't run a server during test. If one is required,

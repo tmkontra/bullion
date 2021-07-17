@@ -1,4 +1,4 @@
-defmodule Table.Player do
+defmodule Bullion.Table.Player do
   defstruct ~w[id name]a
 
   def new(id, name) do

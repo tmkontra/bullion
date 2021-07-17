@@ -1,11 +1,11 @@
 defmodule TableTest do
   use ExUnit.Case
-  doctest Table
 
-  alias Table
+  alias Bullion.Table
+  alias Bullion.Table.Game
 
   test "set up a game" do
-    g = Table.Game.new(%{name: "my great game", buyin_dollars: 20, buyin_chips: 100})
+    g = Game.new(%{name: "my great game", buyin_dollars: 20, buyin_chips: 100})
     assert length(g.players) == 0
     {_plid, g} = Table.add_player(g, "Tyler")
     assert length(g.players) == 1
@@ -14,7 +14,7 @@ defmodule TableTest do
   end
 
   test "buyin increments counter" do
-    {plid, g} = Table.Game.new(%{name: "my great game", buyin_dollars: 20, buyin_chips: 100})
+    {plid, g} = Game.new(%{name: "my great game", buyin_dollars: 20, buyin_chips: 100})
       |> Table.add_player("Tyler")
     assert(Table.total_buyins(g) == 0)
     {_player, g} = Table.buyin(g, plid)
@@ -25,7 +25,7 @@ defmodule TableTest do
   end
 
   test "cashouts should update balance" do
-    {plid, g} = Table.Game.new(%{name: "my great game", buyin_dollars: 20, buyin_chips: 100})
+    {plid, g} = Game.new(%{name: "my great game", buyin_dollars: 20, buyin_chips: 100})
       |> Table.add_player("Tyler")
     {_player, g} = Table.buyin(g, plid)
     {_player, g} = Table.cashout(g, plid, 22)

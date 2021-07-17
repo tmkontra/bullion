@@ -1,5 +1,5 @@
-defmodule Table do
-  alias Table.{Game, Player}
+defmodule Bullion.Table do
+  alias Bullion.Table.{Game, Player}
   @moduledoc """
   Documentation for `Table`.
   """
@@ -57,6 +57,6 @@ defmodule Table do
 
   def balance(game, player_id) do
     {:ok, p} = get_player(game, player_id)
-    Table.Game.player_balance(game, player_id)
+    Game.player_balance(game, player_id)
   end
 end
