@@ -10,7 +10,8 @@ defmodule BullionCore.Application do
     children = [
       # Starts a worker by calling: BullionCore.Worker.start_link(arg)
       # {BullionCore.Worker, arg}
-      {Registry, keys: :unique, name: Registry.Table}
+      {Registry, keys: :unique, name: Registry.Table},
+      BullionCore.TableSupervisor
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

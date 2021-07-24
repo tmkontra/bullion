@@ -1,5 +1,5 @@
 defmodule BullionCore.TableServer do
-  use GenServer
+  use GenServer, start: {__MODULE__, :start_link, []}, restart: :transient
 
   alias BullionCore.Table
 
@@ -22,14 +22,18 @@ defmodule BullionCore.TableServer do
     GenServer.call(table, {:add_player, player_name})
   end
 
+  def player_buyin(table, player_id) do
+    GenServer.call(table, {:buyin, player_id})
+  end
+
+  def player_cashout(table, player_id, chip_count) when is_integer(chip_count) do
+    GenServer.call({:cashout, {player_id, chip_count}})
+  end
+
   def handle_call({:add_player, player_name}, _from , state) do
     {plid, state} = state
     |> Table.add_player(player_name)
     {:reply, {:ok, plid}, state}
-  end
-
-  def player_buyin(table, player_id) do
-    GenServer.call(table, {:buyin, player_id})
   end
 
   def handle_call({:buyin, player_id}, _from, state) do
@@ -37,14 +41,9 @@ defmodule BullionCore.TableServer do
     {:reply, :ok, state}
   end
 
-  def player_cashout(table, player_id, chip_count) when is_integer(chip_count) do
-    GenServer.call({:cashout, {player_id, chip_count}})
-  end
-
   def handle_call({player_id, chip_count}, _from, state) do
     {_player, state} = state |> Table.cashout(player_id, chip_count)
     {:reply, :ok, state}
   end
-
 
 end
