@@ -11,9 +11,10 @@ defmodule Bullion.Application do
       # Start the Ecto repository
       Bullion.Repo,
       # Start the endpoint when the application starts
-      BullionWeb.Endpoint
+      BullionWeb.Endpoint,
       # Starts a worker by calling: Bullion.Worker.start_link(arg)
       # {Bullion.Worker, arg},
+      {Phoenix.PubSub, [name: Bullion.PubSub, adapter: Phoenix.PubSub.PG2]}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

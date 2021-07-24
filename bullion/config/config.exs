@@ -14,8 +14,9 @@ config :bullion,
 config :bullion, BullionWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "6TjB+DZ4VRcHWVHy/VEZb4iB2ECa1DAs+VBPwN6lG98NmW7mndkHge9wsrDahEp6",
-  render_errors: [view: BullionWeb.ErrorView, accepts: ~w(html json)]
-  # pubsub: [name: Bullion.PubSub, adapter: Phoenix.PubSub.PG2]
+  render_errors: [view: BullionWeb.ErrorView, accepts: ~w(html json)],
+  reloadable_apps: [:bullion_core],
+  pubsub_server: Bullion.PubSub
 
 # Configures Elixir's Logger
 config :logger, :console,

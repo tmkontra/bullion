@@ -49,7 +49,7 @@ defmodule BullionCore.Table do
     %{table | buys: buys}
   end
 
-  defp get_player(table, player_id) do
+  def get_player(table, player_id) do
     table.players
       |> Enum.find(fn p -> p.id == player_id end)
       |> case do
@@ -67,21 +67,47 @@ defmodule BullionCore.Table do
   def player_balance(table, player_id) do
     {:ok, p} = get_player(table, player_id)
     dpc = dollars_per_chip(table)
-    out = outstanding_chips(table, player_id)
-    dollars = out * dpc
-    {out, dollars}
+    buys = Map.get(table.buys, player_id, 0)
+    cashouts = Map.get(table.cashouts, player_id, [])
+    remaining = outstanding_chips(table.buyin_chips, buys, cashouts)
+    chips_purchased = buys * table.buyin_chips
+    chips_returned = Enum.sum(cashouts)
+    chip_balance = chips_purchased - chips_returned
+    chip_value = chip_balance * dpc
+    buyin_total = buys * table.buyin_dollars
+    {buys, cashouts, remaining, chip_value, buyin_total}
+  end
+
+  def player_views(table) do
+    for player <- table.players do
+      {buys, cashouts, remaining, chip_value, buyin_total} = balance = player_balance(table, player.id)
+      bank = if chip_value < 0 do
+        {:owed, -chip_value}
+      else
+        {:owes, chip_value}
+      end
+      {player, buys, Enum.sum(cashouts), remaining, bank}
+    end
+  end
+
+  def balance_sheet(table) do
+    total_buys = total_buyins(table)
+    total_out = player_views(table)
+    |> Enum.reduce(0, fn ({_, _, _, outstanding, _}, acc) -> acc + outstanding end)
+    {owed, owes} = player_views(table)
+    |> Enum.map(fn {_, _, _, _, bank} -> bank end)
+    |> Enum.split_with(fn {owe?, value} -> owe? == :owed end)
+    owes = owes |> Enum.reduce(0, fn ({_, value}, acc) -> acc + value end)
+    owed = owed |> Enum.reduce(0, fn ({_, value}, acc) -> acc + value end)
+    {total_buys, total_out, owes, owed}
   end
 
   defp dollars_per_chip(table) do
     table.buyin_dollars / table.buyin_chips
   end
 
-  defp outstanding_chips(table, player_id) do
-    {_plid, buys} = table.buys
-      |> Enum.find({player_id, 0}, &match_player_id(player_id, &1))
-    {_plid, cashouts} = table.cashouts
-      |> Enum.find({player_id, [0]}, &match_player_id(player_id, &1))
-    purchased_chips = buys * table.buyin_chips
+  defp outstanding_chips(buyin_chips, buys, cashouts) do
+    purchased_chips = buys * buyin_chips
     returned_chips = cashouts |> Enum.sum
     purchased_chips - returned_chips
   end

@@ -12,6 +12,7 @@ defmodule BullionCore.TableServer do
     )
   end
 
+  @spec via(any) :: {:via, Registry, {Registry.Table, any}}
   def via(table_id), do: {:via, Registry, {Registry.Table, table_id}}
 
   def init({table_id, table_name, buyin_chips, buyin_dollars}) do
@@ -27,7 +28,7 @@ defmodule BullionCore.TableServer do
   end
 
   def player_cashout(table, player_id, chip_count) when is_integer(chip_count) do
-    GenServer.call({:cashout, {player_id, chip_count}})
+    GenServer.call(table, {:cashout, {player_id, chip_count}})
   end
 
   def handle_call({:add_player, player_name}, _from , state) do
@@ -41,7 +42,7 @@ defmodule BullionCore.TableServer do
     {:reply, :ok, state}
   end
 
-  def handle_call({player_id, chip_count}, _from, state) do
+  def handle_call({:cashout, {player_id, chip_count}}, _from, state) do
     {_player, state} = state |> Table.cashout(player_id, chip_count)
     {:reply, :ok, state}
   end

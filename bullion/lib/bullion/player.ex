@@ -1,7 +1,7 @@
 defmodule Bullion.Player do
   use Ecto.Schema
   import Ecto.Changeset
-  
+
   @timestamps_opts [type: :utc_datetime]
 
   schema "player" do

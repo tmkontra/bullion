@@ -25,7 +25,7 @@
     </tr>
   <% end %>
 </table>
-<%= 
+<%=
   link to: Routes.game_path(@conn, :list_players, admin_shortcode: @game.admin_shortcode) do
     raw "<button>Add More Players</button>"
   end
