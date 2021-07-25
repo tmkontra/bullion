@@ -16,7 +16,12 @@ defmodule BullionCore.TableServer do
   def via(table_id), do: {:via, Registry, {Registry.Table, table_id}}
 
   def init({table_id, table_name, buyin_chips, buyin_dollars}) do
-    {:ok, Table.new(%{id: table_id, name: table_name, buyin_dollars: buyin_dollars, buyin_chips: buyin_chips})}
+    table = Table.new(%{id: table_id, name: table_name, buyin_dollars: buyin_dollars, buyin_chips: buyin_chips})
+    {:ok, table}
+  end
+
+  def view_table(table) do
+    GenServer.call(table, :view_table)
   end
 
   def add_player(table, player_name) when is_binary(player_name) do
@@ -45,6 +50,10 @@ defmodule BullionCore.TableServer do
   def handle_call({:cashout, {player_id, chip_count}}, _from, state) do
     {_player, state} = state |> Table.cashout(player_id, chip_count)
     {:reply, :ok, state}
+  end
+
+  def handle_call(:view_table, _from, state) do
+    {:reply, {:ok, state}, state}
   end
 
 end
