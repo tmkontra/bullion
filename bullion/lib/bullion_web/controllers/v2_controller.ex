@@ -24,6 +24,11 @@ defmodule BullionWeb.V2Controller do
     |> render("view.html", table: table)
   end
 
+  def find_game(conn, %{"table_id" => table_id}) do
+    conn
+    |> redirect(to: Routes.v2_path(conn, :view_game, table_id))
+  end
+
   def add_player(conn, %{"game_id" => game_id, "player" => %{"name" => name}}) do
     {:ok, _plid} = TableSupervisor.add_player(game_id, name)
     conn

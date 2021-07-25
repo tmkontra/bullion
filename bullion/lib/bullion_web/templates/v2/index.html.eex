@@ -1,15 +1,50 @@
-<div class="btn white darken-4 col s10 m4">
-    <h3>Start a Game</h3>
-    <%= form_for @conn, Routes.v2_path(@conn, :start_game), [method: :post], fn f -> %>
-        <label>
-            Name:<%= text_input f, :name %>
-        </label>
-        <label>
-            Buyin Chips: <%= number_input f, :buyin_chips %>
-        </label>
-        <label>
-            Buyin Dollars: <%= number_input f, :buyin_dollars %>
-        </label>
-        <%= submit "Start Game" %>
-    <% end %>
+<div class="columns is-centered">
+    <div class="column">
+        <div class="container">
+            <h2 class="title">Start a Table</h2>
+            <%= form_for @conn, Routes.v2_path(@conn, :start_game), [method: :post], fn f -> %>
+                <div class="field">
+                    <label class="Label">
+                        Table Name
+                    </label>
+                    <div class="control">
+                        <%= text_input f, :name %>
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="Label">
+                        Buyin Chips
+                    </label>
+                    <div class="control">
+                        <%= number_input f, :buyin_chips %>
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="Label">
+                        Buyin Dollars
+                    </label>
+                    <div class="control">
+                        <%= number_input f, :buyin_dollars %>
+                    </div>
+                </div>
+                <%= submit "Start Game" %>
+            <% end %>
+        </div>
+    </div>
+    <div class="column">
+        <div class="container">
+            <h2 class="title">Find Existing Table</h2>
+            <%= form_for @conn, Routes.v2_path(@conn, :find_game), [method: :post], fn f -> %>
+                <div class="field">
+                    <label class="Label">
+                        Table ID
+                    </label>
+                    <div class="control">
+                        <%= text_input f, :table_id %>
+                    </div>
+                </div>
+                <%= submit "Find Game" %>
+            <% end %>
+        </div>
+    </div>
 </div>

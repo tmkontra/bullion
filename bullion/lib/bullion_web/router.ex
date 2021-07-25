@@ -40,6 +40,7 @@ defmodule BullionWeb.Router do
     post "/game/:game_id/buyin/:player_id", V2Controller, :add_buyin
     get "/game/:game_id/cashout/:player_id", V2Controller, :cashout_form
     post "/game/:game_id/cashout/:player_id", V2Controller, :cashout
+    post "/game/lookup", V2Controller, :find_game
   end
 
   # Other scopes may use custom stacks.

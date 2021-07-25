@@ -13,8 +13,12 @@ defmodule BullionCore.Table do
     Base.encode16(:crypto.strong_rand_bytes(8))
   end
 
+  defp generate_player_id(_args \\ []) do
+    Base.encode16(:crypto.strong_rand_bytes(6))
+  end
+
   def add_player(table, name) do
-    new_id = to_string(length(table.players) + 1) # TODO: use UUID
+    new_id = generate_player_id()
     player = Player.new(new_id, name)
     players = [player | table.players]
     {player, %{table | players: players}}

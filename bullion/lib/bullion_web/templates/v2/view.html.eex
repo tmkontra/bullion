@@ -1,7 +1,10 @@
-<div class="btn white darken-4 col s10 m4">
-    <h3><%= @table.name %></h3>
-    <small>Table ID: <%= @table.id %></small>
-    <table class="table table-striped">
+<h3 class="title" style="margin-bottom: 5px"><%= @table.name %></h3>
+<small>Table ID: <%= @table.id %></small>
+
+<hr style="size: 1px"/>
+
+<div class="container">
+    <table class="table is-striped">
         <thead>
             <th>Name</th>
             <th>Buyin Count</th>
@@ -11,44 +14,54 @@
             <th>Owes Banker</th>
             <th>Owed by Bank</th>
         </thead>
+        <tfoot>
+            <% {buyins, cashedout, owes, owed} = Table.balance_sheet(@table) %>
+            <tr>
+                <th>Totals</th>
+                <th class="has-text-right"><%= buyins %></th>
+                <th></th>
+                <th class="has-text-right"><%= cashedout %></th>
+                <th></th>
+                <th class="has-text-right"><%= owes %></th>
+                <th class="has-text-right"><%= owed %></th>
+            </tr>
+        </tfoot>
         <tbody>
             <%= for {player, buys, _cashed_out, remaining, {owe?, dollars}} <- Table.player_views(@table) do %>
             <tr>
                 <td><%= player.name %></td>
-                <td><%= buys %></td>
+                <td class="has-text-right"><%= buys %></td>
                 <td><%= button("+Buyin", to: Routes.v2_path(@conn, :add_buyin, @table.id, player.id)) %></td>
-                <td><%= remaining %></td>
+                <td class="has-text-right"><%= remaining %></td>
                 <td><%= button("Cashout", to: Routes.v2_path(@conn, :cashout_form, @table.id, player.id), method: :get)   %></td>
                 <%= if owe? == :owes do %>
-                <td><%= dollars %></td>
+                <td class="has-text-right"><%= dollars %></td>
                 <%= else %>
                 <td>-</td>
                 <% end %>
                 <%= if owe? == :owed do %>
-                <td><%= dollars %></td>
+                <td class="has-text-right"><%= dollars %></td>
                 <%= else %>
                 <td>-</td>
                 <% end %>
             </tr>
             <% end %>
-            <% {buyins, cashedout, owes, owed} = Table.balance_sheet(@table) %>
-            <tr>
-                <td>Totals</td>
-                <td><%= buyins %></td>
-                <td></td>
-                <td><%= cashedout %></td>
-                <td></td>
-                <td><%= owes %></td>
-                <td><%= owed %></td>
-            </tr>
         </tbody>
     </table>
-    <hr/>
-    <h4>Add A Player</h4>
+</div>
+
+<hr style="size: 1px"/>
+
+<div class="container">
+    <h4 class="is-size-4">Add A Player</h4>
     <%= form_for @conn, Routes.v2_path(@conn, :add_player, @table.id), [method: :post, as: :player], fn f -> %>
-        <label>
-            Name: <%= text_input f, :name, required: true %>
+        <div class="field">
+        <label class="label">
+            Name:
         </label>
+        <div class="control">
+            <%= text_input f, :name, required: true %>
+        </div>
     <%= submit "Add Player" %>
-  <% end %>
+    <% end %>
 </div>
