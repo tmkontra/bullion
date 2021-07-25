@@ -1,7 +1,8 @@
 defmodule BullionCore.TableServer do
-  use GenServer, start: {__MODULE__, :start_link, []}, restart: :transient
+  use GenServer, start: {__MODULE__, :start_link, []}, restart: :permanent
 
   alias BullionCore.Table
+  alias BullionCore
 
   def start_link({table_name, buyin_chips, buyin_dollars} = _args) when is_binary(table_name) and is_integer(buyin_chips) and is_number(buyin_dollars) do
     table_id = Table.generate_table_id([])
@@ -25,6 +26,7 @@ defmodule BullionCore.TableServer do
 
   def init({table_id, table_name, buyin_chips, buyin_dollars}) do
     table = Table.new(%{id: table_id, name: table_name, buyin_dollars: buyin_dollars, buyin_chips: buyin_chips})
+    BullionCore.save_new_table(table)
     {:ok, table}
   end
 
@@ -40,7 +42,7 @@ defmodule BullionCore.TableServer do
     GenServer.call(table, {:add_player, player_name})
   end
 
-  def player_buyin(table, player_id) do
+  def player_buyin(table, player_id) when is_binary(player_id) do
     GenServer.call(table, {:buyin, player_id})
   end
 
@@ -49,18 +51,22 @@ defmodule BullionCore.TableServer do
   end
 
   def handle_call({:add_player, player_name}, _from , state) do
-    {plid, state} = state
+    {player, state} = state
     |> Table.add_player(player_name)
+    BullionCore.save_player(state.id, player)
+    plid = player.id
     {:reply, {:ok, plid}, state}
   end
 
-  def handle_call({:buyin, player_id}, _from, state) do
-    {_player, state} = state |> Table.buyin(player_id)
+  def handle_call({:buyin, player_id}, _from, %Table{id: table_id} = state) do
+    {player, state} = state |> Table.buyin(player_id)
+    BullionCore.save_buyin(table_id, player_id)
     {:reply, :ok, state}
   end
 
-  def handle_call({:cashout, {player_id, chip_count}}, _from, state) do
+  def handle_call({:cashout, {player_id, chip_count}}, _from, %Table{id: table_id} = state) do
     {_player, state} = state |> Table.cashout(player_id, chip_count)
+    BullionCore.save_cashout(table_id, player_id, chip_count)
     {:reply, :ok, state}
   end
 

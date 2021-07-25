@@ -35,7 +35,7 @@ defmodule BullionCore.TableSupervisor do
   defp create_table_process_if_record_exists({running?, pid} = process_already_exists?, table_id) do
     IO.puts "table already running? #{running?}"
     case process_already_exists? do
-      false ->
+      {false, nil} ->
         case BullionCore.table_lookup(table_id) do
           nil -> {:error, "Table #{table_id} not found"}
           table ->
@@ -52,11 +52,12 @@ defmodule BullionCore.TableSupervisor do
   end
 
   def view_table(table_id) when is_binary(table_id) do
-    {:ok, table} = table_id
+    with {:ok, table} = table_id
     |> via()
     |> table_process_exists?()
-    |> create_table_process_if_record_exists(table_id)
-    TableServer.view_table(table)
+    |> create_table_process_if_record_exists(table_id) do
+      TableServer.view_table(table)
+    end
   end
 
   def view_table(table_pid) when is_pid(table_pid) do
@@ -69,7 +70,7 @@ defmodule BullionCore.TableSupervisor do
     |> TableServer.add_player(player_name)
   end
 
-  def player_buyin(table_id, player_id) do
+  def player_buyin(table_id, player_id) when is_binary(player_id) do
     table_id
     |> via()
     |> TableServer.player_buyin(player_id)

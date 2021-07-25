@@ -2,7 +2,6 @@ defmodule BullionCore.Table do
   defstruct ~w[id name buyin_dollars buyin_chips players buys cashouts]a
 
   alias BullionCore.Player
-  alias BullionCore
 
   def new(fields) do
     defaults = %{players: [], buys: %{}, cashouts: %{}}
@@ -15,10 +14,10 @@ defmodule BullionCore.Table do
   end
 
   def add_player(table, name) do
-    new_id = length(table.players) + 1 # TODO: use UUID
+    new_id = to_string(length(table.players) + 1) # TODO: use UUID
     player = Player.new(new_id, name)
     players = [player | table.players]
-    {new_id, %{table | players: players}}
+    {player, %{table | players: players}}
   end
 
   def buyin(table, player_id) do

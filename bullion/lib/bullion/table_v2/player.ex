@@ -11,8 +11,8 @@ defmodule Bullion.TableV2.Player do
     field :player_id, :string
 
     belongs_to :table, Table
-    has_many :table_buyin, Buyin
-    has_many :table_cashout, Cashout
+    has_many :buyins, Buyin
+    has_many :cashouts, Cashout
 
     timestamps()
   end

@@ -19,7 +19,11 @@ config :bullion, BullionWeb.Endpoint,
   pubsub_server: Bullion.PubSub
 
 config :bullion_core,
-  table_lookup_fn: &Bullion.TableV2.lookup_table/1
+  table_lookup_fn: &Bullion.TableV2.lookup_table/1,
+  save_new_table_fn: &Bullion.TableV2.save_new_table/1,
+  save_new_player_fn: &Bullion.TableV2.save_player/2,
+  save_buyin_fn: &Bullion.TableV2.save_buyin/2,
+  save_cashout_fn: &Bullion.TableV2.save_cashout/3
 
 # Configures Elixir's Logger
 config :logger, :console,

@@ -1,9 +1,7 @@
 defmodule BullionWeb.V2Controller do
   use BullionWeb, :controller
 
-  alias BullionCore.{TableSupervisor, TableServer, Table}
-  alias Bullion.Repo
-  alias Bullion.TableV2
+  alias BullionCore.{TableSupervisor, Table}
 
   def index(conn, _params) do
     render(conn, "index.html")
@@ -13,8 +11,7 @@ defmodule BullionWeb.V2Controller do
     with {buyin_chips, _err} = Integer.parse(buyin_chips),
          {buyin_dollars, _err} = Integer.parse(buyin_dollars),
          {:ok, pid} = TableSupervisor.start_table({name, buyin_chips, buyin_dollars}),
-         {:ok, table} = TableSupervisor.view_table(pid),
-         table = TableV2.save_new_table(table)
+         {:ok, table} = TableSupervisor.view_table(pid)
     do
       conn
       |> redirect(to: Routes.v2_path(conn, :view_game, table.id))
@@ -34,14 +31,12 @@ defmodule BullionWeb.V2Controller do
   end
 
   def add_buyin(conn, %{"game_id" => game_id, "player_id" => player_id}) do
-    {player_id, _err} = Integer.parse(player_id)
     :ok = TableSupervisor.player_buyin(game_id, player_id)
     conn
     |> redirect(to: Routes.v2_path(conn, :view_game, game_id))
   end
 
   def cashout_form(conn, %{"game_id" => game_id, "player_id" => player_id}) do
-    {player_id, _err} = Integer.parse(player_id)
     {:ok, table} = TableSupervisor.view_table(game_id)
     {:ok, player} = Table.get_player(table, player_id)
     conn
@@ -49,7 +44,6 @@ defmodule BullionWeb.V2Controller do
   end
 
   def cashout(conn, %{"game_id" => game_id, "player_id" => player_id, "chip_count" => chip_count}) do
-    {player_id, _err} = Integer.parse(player_id)
     {chip_count, _err} = Integer.parse(chip_count)
     :ok = TableSupervisor.player_cashout(game_id, player_id, chip_count)
     conn
