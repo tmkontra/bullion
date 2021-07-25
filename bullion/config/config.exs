@@ -18,6 +18,9 @@ config :bullion, BullionWeb.Endpoint,
   reloadable_apps: [:bullion_core],
   pubsub_server: Bullion.PubSub
 
+config :bullion_core,
+  table_lookup_fn: &Bullion.TableV2.lookup_table/1
+
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",

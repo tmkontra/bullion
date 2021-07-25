@@ -2,6 +2,7 @@ defmodule BullionCore.Table do
   defstruct ~w[id name buyin_dollars buyin_chips players buys cashouts]a
 
   alias BullionCore.Player
+  alias BullionCore
 
   def new(fields) do
     defaults = %{players: [], buys: %{}, cashouts: %{}}

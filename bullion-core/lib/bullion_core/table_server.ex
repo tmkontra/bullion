@@ -3,12 +3,20 @@ defmodule BullionCore.TableServer do
 
   alias BullionCore.Table
 
-  def start_link({table_name, buyin_chips, buyin_dollars} = args) when is_binary(table_name) and is_integer(buyin_chips) and is_number(buyin_dollars) do
+  def start_link({table_name, buyin_chips, buyin_dollars} = _args) when is_binary(table_name) and is_integer(buyin_chips) and is_number(buyin_dollars) do
     table_id = Table.generate_table_id([])
     GenServer.start_link(
       __MODULE__,
       {table_id, table_name, buyin_chips, buyin_dollars},
       name: via(table_id)
+    )
+  end
+
+  def start_link(%Table{} = existing_table) do
+    GenServer.start_link(
+      __MODULE__,
+      existing_table,
+      name: via(existing_table.id)
     )
   end
 
@@ -18,6 +26,10 @@ defmodule BullionCore.TableServer do
   def init({table_id, table_name, buyin_chips, buyin_dollars}) do
     table = Table.new(%{id: table_id, name: table_name, buyin_dollars: buyin_dollars, buyin_chips: buyin_chips})
     {:ok, table}
+  end
+
+  def init(%Table{} = existing_table) do
+    {:ok, existing_table}
   end
 
   def view_table(table) do
