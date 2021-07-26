@@ -5,7 +5,9 @@ FROM elixir:latest
 
 # Create app directory and copy the Elixir projects into it
 RUN mkdir /app
+RUN  mkdir /bullion-core
 COPY ./bullion /app
+COPY ./bullion-core /bullion-core
 WORKDIR /app
 
 # Install hex package manager
@@ -22,6 +24,9 @@ RUN mix local.rebar --force
 ARG deps_postfix
 RUN mix deps.get ${deps_postfix}
 
+RUN apt-get update
+RUN apt-get install -y npm
+RUN cd assets && npm install && cd -
 RUN npm run deploy --prefix ./assets
 RUN mix do compile
 
