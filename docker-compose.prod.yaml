@@ -12,7 +12,7 @@ services:
     ports:
       - "4000:4000"
     environment:
-      - PORT=4001
+      - PORT=4000
       - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db/${POSTGRES_DB}
   db:
     container_name: "bullion-db"
