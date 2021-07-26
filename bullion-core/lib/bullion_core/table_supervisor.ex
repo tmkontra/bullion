@@ -52,11 +52,11 @@ defmodule BullionCore.TableSupervisor do
   end
 
   def view_table(table_id) when is_binary(table_id) do
-    with {:ok, table} = table_id
-    |> via()
-    |> table_process_exists?()
-    |> create_table_process_if_record_exists(table_id) do
+    with exists? <- via(table_id) |> table_process_exists?(),
+         {:ok, table} <- create_table_process_if_record_exists(exists?, table_id) do
       TableServer.view_table(table)
+    else
+      _ -> {:error, :not_found}
     end
   end
 

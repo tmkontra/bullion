@@ -28,6 +28,7 @@
         </tfoot>
         <tbody>
             <%= for {player, buys, _cashed_out, remaining, {owe?, dollars}} <- Table.player_views(@table) do %>
+            <% dollars = dollars |> Decimal.from_float() |> Decimal.round(2) %>
             <tr>
                 <td><%= player.name %></td>
                 <td class="has-text-right"><%= buys %></td>

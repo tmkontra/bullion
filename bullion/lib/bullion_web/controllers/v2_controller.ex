@@ -8,10 +8,10 @@ defmodule BullionWeb.V2Controller do
   end
 
   def start_game(conn, %{"name" => name, "buyin_chips" => buyin_chips, "buyin_dollars" => buyin_dollars}) do
-    with {buyin_chips, _err} = Integer.parse(buyin_chips),
-         {buyin_dollars, _err} = Integer.parse(buyin_dollars),
-         {:ok, pid} = TableSupervisor.start_table({name, buyin_chips, buyin_dollars}),
-         {:ok, table} = TableSupervisor.view_table(pid)
+    with {buyin_chips, _err} <- Integer.parse(buyin_chips),
+         {buyin_dollars, _err} <- Integer.parse(buyin_dollars),
+         {:ok, pid} <- TableSupervisor.start_table({name, buyin_chips, buyin_dollars}),
+         {:ok, table} <- TableSupervisor.view_table(pid)
     do
       conn
       |> redirect(to: Routes.v2_path(conn, :view_game, table.id))
@@ -19,9 +19,14 @@ defmodule BullionWeb.V2Controller do
   end
 
   def view_game(conn, %{"game_id" => game_id}) do
-    {:ok, table} = TableSupervisor.view_table(game_id)
-    conn
-    |> render("view.html", table: table)
+    with {:ok, table} <- TableSupervisor.view_table(game_id) do
+      conn
+      |> render("view.html", table: table)
+    else
+      _err -> conn
+      |> put_flash(:error, "No table found!")
+      |> redirect(to: Routes.v2_path(conn, :index))
+    end
   end
 
   def find_game(conn, %{"table_id" => table_id}) do

@@ -11,12 +11,20 @@
   <body>
     <nav class="navbar is-info" role="navigation" aria-label="main-navigation">
       <div class="navbar-brand">
-        <a class="navbar-item" href="/"><p>	&#9827;</p>Banker</a>
+        <a class="navbar-item" href="/"><h4 class="subtitle" style="color: white">&#9827; Banker</h4></a>
       </div>
     </nav>
     <section class="section">
-      <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
-      <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
+      <%= if get_flash(@conn, :info) do %>
+      <div class="notification is-info">
+        <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
+      </div>
+      <% end %>
+      <%= if get_flash(@conn, :error) do %>
+      <div class="notification is-warning">
+        <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
+      </div>
+      <% end %>
       <div class="container">
         <%= @inner_content %>
       </div>

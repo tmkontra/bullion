@@ -101,8 +101,8 @@ defmodule BullionCore.Table do
     {owed, owes} = player_views(table)
     |> Enum.map(fn {_, _, _, _, bank} -> bank end)
     |> Enum.split_with(fn {owe?, value} -> owe? == :owed end)
-    owes = owes |> Enum.reduce(0, fn ({_, value}, acc) -> acc + value end)
-    owed = owed |> Enum.reduce(0, fn ({_, value}, acc) -> acc + value end)
+    owes = owes |> Enum.reduce(0, fn ({_, value}, acc) -> acc + value end) |> Decimal.from_float() |> Decimal.round(2)
+    owed = owed |> Enum.reduce(0, fn ({_, value}, acc) -> acc + value end) |> Decimal.from_float() |> Decimal.round(2)
     {total_buys, total_out, owes, owed}
   end
 
