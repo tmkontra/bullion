@@ -57,7 +57,8 @@ config :bullion, BullionWeb.Endpoint,
       ~r"priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$",
       ~r"priv/gettext/.*(po)$",
       ~r"lib/bullion_web/{live,views}/.*(ex)$",
-      ~r"lib/bullion_web/templates/.*(eex)$"
+      ~r"lib/bullion_web/templates/.*(eex)$",
+      ~r"../bullion-core/.*$",
     ]
   ]
 

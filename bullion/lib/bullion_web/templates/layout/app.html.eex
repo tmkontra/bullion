@@ -3,25 +3,32 @@
   <head>
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Bullion · Phoenix Framework</title>
-    <link rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bullion · Poker Table Banking</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+    <script src="https://kit.fontawesome.com/887df4a4d6.js" crossorigin="anonymous"></script>
   </head>
   <body>
-    <header>
-      <section class="container">
-        <nav role="navigation">
-          <ul>
-            <li><a href="/">Banker</a></li>
-          </ul>
-        </nav>
-      </section>
-    </header>
-    <main role="main" class="container">
-      <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
-      <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
-      <%= render @view_module, @view_template, assigns %>
-    </main>
+    <nav class="navbar is-info" role="navigation" aria-label="main-navigation">
+      <div class="navbar-brand">
+        <a class="navbar-item" href="/"><h4 class="subtitle" style="color: white">&#9827; Banker</h4></a>
+      </div>
+    </nav>
+    <section class="section">
+      <%= if get_flash(@conn, :info) do %>
+      <div class="notification is-info">
+        <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
+      </div>
+      <% end %>
+      <%= if get_flash(@conn, :error) do %>
+      <div class="notification is-warning">
+        <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
+      </div>
+      <% end %>
+      <div class="container">
+        <%= @inner_content %>
+      </div>
+    </div>
     <script type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
   </body>
 </html>

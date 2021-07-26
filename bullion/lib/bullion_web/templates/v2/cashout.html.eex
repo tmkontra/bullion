@@ -1,0 +1,10 @@
+<div class="btn white darken-4 col s10 m4">
+    <h3>Cashout: <%= @player.name %></h3>
+    <small>Table ID: <%= @table.id %></small>
+    <%= form_for @conn, Routes.v2_path(@conn, :cashout, @table.id, @player.id), [method: :post], fn f -> %>
+        <label>
+            Chips: <%= number_input f, :chip_count %>
+        </label>
+        <%= submit "Cash Out" %>
+    <% end %>
+</div>

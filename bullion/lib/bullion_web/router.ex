@@ -13,7 +13,7 @@ defmodule BullionWeb.Router do
     plug :accepts, ["json"]
   end
 
-  scope "/", BullionWeb do
+  scope "/legacy", BullionWeb do
     pipe_through :browser
 
     get "/", PageController, :index
@@ -28,6 +28,19 @@ defmodule BullionWeb.Router do
 
     get "/player/:player_id/cashout", PlayerController, :cash_out
     post "/player/:player_id/cashout", PlayerController, :cash_out
+  end
+
+  scope "/", BullionWeb do
+    pipe_through :browser
+
+    get "/", V2Controller, :index
+    post "/start", V2Controller, :start_game
+    get "/game/:game_id", V2Controller, :view_game
+    post "/game/:game_id/player", V2Controller, :add_player
+    post "/game/:game_id/buyin/:player_id", V2Controller, :add_buyin
+    get "/game/:game_id/cashout/:player_id", V2Controller, :cashout_form
+    post "/game/:game_id/cashout/:player_id", V2Controller, :cashout
+    post "/game/lookup", V2Controller, :find_game
   end
 
   # Other scopes may use custom stacks.

@@ -15,7 +15,15 @@ config :bullion, BullionWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "6TjB+DZ4VRcHWVHy/VEZb4iB2ECa1DAs+VBPwN6lG98NmW7mndkHge9wsrDahEp6",
   render_errors: [view: BullionWeb.ErrorView, accepts: ~w(html json)],
-  pubsub: [name: Bullion.PubSub, adapter: Phoenix.PubSub.PG2]
+  reloadable_apps: [:bullion_core],
+  pubsub_server: Bullion.PubSub
+
+config :bullion_core,
+  table_lookup_fn: &Bullion.TableV2.lookup_table/1,
+  save_new_table_fn: &Bullion.TableV2.save_new_table/1,
+  save_new_player_fn: &Bullion.TableV2.save_player/2,
+  save_buyin_fn: &Bullion.TableV2.save_buyin/2,
+  save_cashout_fn: &Bullion.TableV2.save_cashout/3
 
 # Configures Elixir's Logger
 config :logger, :console,
