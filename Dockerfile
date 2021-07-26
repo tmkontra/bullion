@@ -22,6 +22,7 @@ RUN mix local.rebar --force
 ARG deps_postfix
 RUN mix deps.get ${deps_postfix}
 
+RUN npm run deploy --prefix ./assets
 RUN mix do compile
 
 RUN mix phx.digest
