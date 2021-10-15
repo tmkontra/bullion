@@ -38,5 +38,6 @@ defmodule BullionWeb.RateLimit do
   defp render_error(conn) do
     conn
     |> send_resp(429, "")
+    |> halt()
   end
 end
