@@ -44,7 +44,9 @@ defmodule Bullion.MixProject do
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
       {:hashids, "~> 2.0"},
-      {:bullion_core, path: "../bullion-core"}
+      {:bullion_core, path: "../bullion-core"},
+      {:hammer, "~> 6.0"},
+      {:remote_ip, "~> 1.0"}
     ]
   end
 

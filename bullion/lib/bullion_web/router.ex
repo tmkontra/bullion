@@ -7,6 +7,8 @@ defmodule BullionWeb.Router do
     plug :fetch_flash
     plug :protect_from_forgery
     plug :put_secure_browser_headers
+    plug RemoteIp
+    plug BullionWeb.RateLimit
   end
 
   pipeline :api do
