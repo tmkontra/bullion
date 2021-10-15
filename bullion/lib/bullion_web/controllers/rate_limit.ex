@@ -28,9 +28,10 @@ defmodule BullionWeb.RateLimit do
 
   defp bucket_name(conn) do
     principal = case conn.remote_ip do
-      nil -> "unidentified"
+      nil -> "<unidentified>"
       addr -> addr |> Tuple.to_list |> Enum.join(".")
     end
+    Logger.debug("Checking rate limit for principal: #{principal}")
     @global_bucket_name <> "_principal=" <> principal
   end
 
