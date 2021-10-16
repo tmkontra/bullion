@@ -11,10 +11,6 @@ defmodule BullionCore do
   @save_buyin_fn Application.fetch_env!(:bullion_core, :save_buyin_fn)
   @save_cashout_fn Application.fetch_env!(:bullion_core, :save_cashout_fn)
 
-  def hello do
-    :world
-  end
-
   @spec table_lookup(binary(), (binary -> Table | nil)) :: Table | nil
   def table_lookup(table_id, lookup_fn \\ @table_lookup_fn) when is_binary(table_id) do
     lookup_fn.(table_id)
