@@ -43,3 +43,8 @@ Legacy Architecture (available at `/legacy` url prefix):
   - alternatively, "close" a table so that it can no longer be modified, and then the game can be shared
 - Client-side sessions (cookies) to provide a `Your Recent Games` section on the home page
   - this will make it easy to return to previously reviewed games (without remembering a table id).
+- "Undo" Functionality
+  - Probably need something resembling event sourcing. 
+  - Allow "undoing" out of sequence? Or just linked-list style undo.
+    - "Out of sequence" undo is more accurately called "revert" or "invalidate" a given action.
+  - Goal is to provide "audit trail" for all participants to view what was accounted for and how.
